@@ -38,7 +38,7 @@ export function displayPrimitivesAtClick(vs_script, fs_script){
     vertices.push(0.0)
 
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW)
-    gl.drawArrays(gl.LINES, 0, vertices.length / 3)
+    gl.drawArrays(gl.TRIANGLES, 0, vertices.length / 3)
 
   }
 

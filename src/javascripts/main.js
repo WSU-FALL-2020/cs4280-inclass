@@ -9,8 +9,50 @@ document.querySelector('#std_name').innerHTML = `<strong>${std_name}</strong>`
 
 //Then: comes everything else
 // Shaders
-import vs_script from "../shaders/vertex.glsl"
-import fs_script from "../shaders/fragment.glsl"
+import vs_script from "../shaders/vertex-color.glsl"
+import fs_script from "../shaders/fragment-color.glsl"
 
 // JavaScript
+import { scribble, sierpinski } from './week05'
+sierpinski()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import {WebGLHelper} from './webgl_helper'
+
+// displayColoredTriangles(vs_script, fs_script)
+
+export function displayColoredTriangles(vs_script, fs_script){
+  let canvas = document.querySelector("#webgl-scene")
+  let gl = WebGLHelper.initWebGL(canvas)
+
+  let program = WebGLHelper.initShaders(gl, vs_script, fs_script)
+  gl.useProgram(program)
+
+  WebGLHelper.initBuffers(gl, program, [{
+      name: 'coordinates',
+      size: 3,
+      data: [0 ,0 , 0, .5, .5, 0, .5, -.5, 0]
+    },{
+      name: 'color',
+      size: 3,
+      data: [1,0,0, 0,1,0, 0,0,1]
+    }])
+
+  WebGLHelper.clear(gl, [1.0, 1.0, 1.0, 1.0])
+  gl.drawArrays(gl.TRIANGLES, 0, 3)
+
+}
 
