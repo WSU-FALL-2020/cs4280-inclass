@@ -13,8 +13,8 @@ import vs_script from "../shaders/vertex-color.glsl"
 import fs_script from "../shaders/fragment-color.glsl"
 
 // JavaScript
-import { displayCube } from './week06'
-displayCube()
+import { displayCubeIndexed } from './week06'
+displayCubeIndexed()
 
 
 
