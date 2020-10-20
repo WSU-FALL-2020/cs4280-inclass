@@ -13,5 +13,5 @@ import vs_script from "../shaders/vertex-color.glsl"
 import fs_script from "../shaders/fragment-color.glsl"
 
 // JavaScript
-import { displayThreeHelloWorld} from './week08'
-displayThreeHelloWorld()
+import { displayMeshes} from './week09'
+displayMeshes()
