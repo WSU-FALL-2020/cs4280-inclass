@@ -105,3 +105,152 @@ export function displayMeshes(){
   gui.add(controls, 'theta').min(-1 * Math.PI).max(Math.PI).onChange(animate)
   gui.add(controls, 'phi').min(-1 * Math.PI).max(Math.PI).onChange(animate)
 }
+
+
+export function displayLightedScene(){
+  let canvas = document.querySelector('#webgl-scene')
+  let scene = new THREE.Scene()
+  let renderer = new THREE.WebGLRenderer({canvas})
+  let camera = new THREE.PerspectiveCamera(45, canvas.clientWidth / canvas.clientWidth, .1, 1000)
+
+  renderer.setSize(canvas.clientWidth, canvas.clientHeight)
+  renderer.setClearColor(0xEEEEEE)
+
+  let axes = new THREE.AxesHelper(10)
+  scene.add(axes)
+
+  let cameraControls = new OrbitControls(camera, renderer.domElement)
+  cameraControls.addEventListener("change", function(){
+    renderer.render(scene, camera)
+  })
+
+  let controls = {
+    radius: 400,
+    theta: 1,
+    phi: 1,
+    ambient: false,
+    directional: false,
+    point: false,
+    spotlight: false,
+    material: 'basic',
+    intensity: 1,
+    spotlight_target: "Cube"
+  }
+
+  // Add a plane
+  let geometry = new THREE.PlaneGeometry(500, 300)
+  let plane = new THREE.Mesh(geometry)
+  plane.materialParams = { color: 0x777777, side: THREE.DoubleSide}
+  plane.rotateX(Math.PI / 2)
+  scene.add(plane)
+
+  // Add a cube
+  geometry = new THREE.BoxGeometry(40, 40, 40)
+  let cube = new THREE.Mesh(geometry)
+  cube.materialParams = { color: 0x00FF00 }
+  cube.position.set(100, 50, 50)
+  scene.add(cube)
+
+  // more objects to come
+
+
+
+
+
+
+  // Add light sources
+  let ambientLight = new THREE.AmbientLight(0x3333FF)
+  let directionalLight = new THREE.DirectionalLight(0x777777)
+  let pointLight = new THREE.PointLight(0x888888)
+  pointLight.position.set(0, 100, 0)
+  let spotLight = new THREE.SpotLight(0x999999)
+  spotLight.position.set(100, 150, 100)
+
+
+  function animate(){
+    if(controls.material === "Lambert"){
+      for(let obj of scene.children){
+        if(obj.materialParams !== undefined){
+          obj.material = new THREE.MeshLambertMaterial(obj.materialParams)
+        }
+      }
+    }else if(controls.material === "Phong"){
+      for(let obj of scene.children){
+        if(obj.materialParams !== undefined){
+          obj.material = new THREE.MeshPhongMaterial(obj.materialParams)
+        }
+      }
+    }else{
+      for(let obj of scene.children){
+        if(obj.materialParams !== undefined){
+          obj.material = new THREE.MeshBasicMaterial(obj.materialParams)
+        }
+      }
+    }
+
+    if(controls.ambient){
+      ambientLight.intensity = controls.intensity
+      scene.add(ambientLight)
+    }else{
+      scene.remove(ambientLight)
+    }
+
+    if(controls.directional){
+      directionalLight.intensity = controls.intensity
+      scene.add(directionalLight)
+    }else{
+      scene.remove(directionalLight)
+    }
+
+    if(controls.point){
+      pointLight.intensity = controls.intensity
+      scene.add(pointLight)
+    }else{
+      scene.remove(pointLight)
+    }
+
+    if(controls.spotlight){
+      spotLight.intensity = controls.intensity
+      spotLight.target = cube
+      scene.add(spotLight)
+    }else{
+      scene.remove(spotLight)
+    }
+
+    camera.position.x = controls.radius * Math.sin(controls.theta) * Math.cos(controls.phi)
+    camera.position.y = controls.radius * Math.cos(controls.theta)
+    camera.position.z = controls.radius * Math.sin(controls.theta) * Math.sin(controls.phi)
+
+    camera.lookAt(scene.position)
+    renderer.render(scene, camera)
+    cameraControls.update()
+  }
+
+  animate()
+
+  let gui = new dat.GUI()
+  document.querySelector('aside').appendChild(gui.domElement)
+
+  let f = gui.addFolder("Camera")
+  f.add(controls, 'radius').min(50).max(900).onChange(animate)
+  f.add(controls, 'theta').min(-1 * Math.PI).max(Math.PI).onChange(animate)
+  f.add(controls, 'phi').min(-1 * Math.PI).max(Math.PI).onChange(animate)
+  f.open()
+
+  f = gui.addFolder("Material")
+  f.add(controls, 'material', ["Basic", "Lambert", "Phong"]).onChange(animate)
+  f.open()
+
+  f = gui.addFolder("Light Sources")
+  f.add(controls, 'ambient').onChange(animate)
+  f.add(controls, 'directional').onChange(animate)
+  f.add(controls, 'point').onChange(animate)
+  f.add(controls, 'spotlight').onChange(animate)
+  f.add(controls, 'intensity').min(0).max(10).onChange(animate)
+
+  f.open()
+
+}
+
+
+
