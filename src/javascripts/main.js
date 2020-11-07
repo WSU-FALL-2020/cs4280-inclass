@@ -13,6 +13,6 @@ import vs_script from "../shaders/vertex-color.glsl"
 import fs_script from "../shaders/fragment-color.glsl"
 
 // JavaScript
-import { displayTexturedScene, displayCity} from './week11'
-displayCity()
+import { displayTexturedScene, displayCity, displaySolar, displayCubes} from './week11'
+displayTexturedScene()
 
