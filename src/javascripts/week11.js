@@ -286,7 +286,10 @@ export function displayTexturedScene(){
       texture.repeat.set(4, 1)
       renderer.render(scene, camera)
     }),
-    floor: texLoader.load('./images/grass.jpg', function(){
+    floor: texLoader.load('./images/grass.jpg', function(texture){
+      texture.wrapS = THREE.RepeatWrapping
+      texture.wrapT = THREE.RepeatWrapping
+      texture.repeat.set(8, 5)
       renderer.render(scene, camera)
     }),
     sinusoidal: sinusoidal(256, 256),
@@ -312,7 +315,7 @@ export function displayTexturedScene(){
   crate.materialParams = {}
   crate.position.set(-100, 50, -100)
   crate.name = 'crate'
-  scene.add(crate)
+  // scene.add(crate)
   crate.castShadow = true
   crate.material = new THREE.MeshStandardMaterial(crate.materialParams)
   crate.material.map = textures[crate.name]
@@ -322,7 +325,7 @@ export function displayTexturedScene(){
 
   let cube = new THREE.Mesh(geometry)
   cube.materialParams = {}
-  cube.position.set(100, 50, 100)
+  cube.position.set(0, 50, 0)
   cube.name = 'checkerboard'
   scene.add(cube)
   cube.castShadow = true
@@ -331,7 +334,7 @@ export function displayTexturedScene(){
 
 
   // Adding the floor
-  geometry = new THREE.PlaneGeometry(500, 300)
+  geometry = new THREE.PlaneGeometry(800, 500)
   let plane = new THREE.Mesh(geometry)
   plane.materialParams = { side: THREE.DoubleSide }
   plane.rotateX(Math.PI / 2)
@@ -364,7 +367,7 @@ export function displayTexturedScene(){
   wall.name = 'wall'
   wall.position.set(0, 50, 150)
   wall.castShadow = true
-  scene.add(wall)
+  // scene.add(wall)
   wall.material = new THREE.MeshStandardMaterial(wall.materialParams)
   wall.material.map = textures[wall.name]
 
@@ -375,7 +378,7 @@ export function displayTexturedScene(){
   sphere.name = 'earth'
   sphere.position.set(200, 50, -50)
   sphere.castShadow = true
-  scene.add(sphere)
+  // scene.add(sphere)
   sphere.material = new THREE.MeshStandardMaterial(sphere.materialParams)
   sphere.material.map = textures[sphere.name]
 
@@ -415,8 +418,8 @@ export function displayTexturedScene(){
 
   animate()
 
-  let gui = new dat.GUI()
-  document.querySelector('aside').appendChild(gui.domElement)
+  // let gui = new dat.GUI()
+  // document.querySelector('aside').appendChild(gui.domElement)
   // gui.add(controls, 'radius').min(2).max(900).onChange(animate)
   // gui.add(controls, 'theta').min(-1 * Math.PI).max(Math.PI).onChange(animate)
   // gui.add(controls, 'phi').min(-1 * Math.PI).max(Math.PI).onChange(animate)
