@@ -24,7 +24,7 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        query: { presets: ['@babel/preset-env'] }
+        options: { presets: ['@babel/preset-env'] }
       }, {
         test: /\.glsl$/,
         use: 'raw-loader'
